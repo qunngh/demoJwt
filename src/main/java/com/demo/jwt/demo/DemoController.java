@@ -16,6 +16,6 @@ public class DemoController {
 
     @GetMapping("/admin")
     public ResponseEntity<String> sayHelloWorld(){
-        return ResponseEntity.ok("Hello from admin page");
+        return ResponseEntity.ok("Hello from admin page"+" xa lo");
     }
 }
