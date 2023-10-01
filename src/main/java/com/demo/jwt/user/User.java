@@ -20,11 +20,15 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
+
     private String pass;
 
     @Enumerated(EnumType.STRING)

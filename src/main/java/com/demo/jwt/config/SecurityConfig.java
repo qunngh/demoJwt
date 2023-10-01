@@ -3,6 +3,7 @@ package com.demo.jwt.config;
 import com.demo.jwt.config.JwtAuthenticationFillter;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerJwtAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import static com.demo.jwt.user.Role.ADMIN;
 import static com.demo.jwt.user.Role.USER;
@@ -31,14 +34,21 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
+    }
+    @Autowired
+    MvcRequestMatcher.Builder mvc;
+
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("api/v1/auth/**"). permitAll()
-                        .requestMatchers("api/v1/demo-controller/admin").hasAuthority(ADMIN.name())
-                        .requestMatchers("api/v1/demo-controller/user").hasAnyAuthority(ADMIN.name(),USER.name())
-
+                        .requestMatchers(mvc.pattern("api/v1/auth/**")).permitAll()
+                        .requestMatchers(mvc.pattern("api/v1/demo-controller/admin")).hasAuthority(ADMIN.name())
+                        .requestMatchers(mvc.pattern("api/v1/demo-controller/user")).hasAnyAuthority(ADMIN.name(),USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
