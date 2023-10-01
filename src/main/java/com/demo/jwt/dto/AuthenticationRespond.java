@@ -1,4 +1,4 @@
-package com.demo.jwt.auth;
+package com.demo.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AuthenticationRespond {
 
-    private String email;
-    private String password;
-    private String role;
+    private String accessToken;
+    private String refreshToken;
 
 
 }

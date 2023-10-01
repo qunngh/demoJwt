@@ -2,6 +2,8 @@ package com.demo.jwt.user;
 
 public enum Role {
     ADMIN,
-    USER
+    USER,
+    EXPERT,
+    STAFF
 
 }
