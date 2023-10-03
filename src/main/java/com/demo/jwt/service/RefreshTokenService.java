@@ -1,5 +1,6 @@
 package com.demo.jwt.service;
 
+import com.demo.jwt.dto.RefreshTokenRequest;
 import com.demo.jwt.repository.RefreshTokenRepository;
 import com.demo.jwt.repository.UserRepository;
 import com.demo.jwt.user.RefreshToken;
@@ -42,6 +43,11 @@ public class RefreshTokenService {
         return token;
     }
 
-
-
+    public void logout(RefreshTokenRequest request) {
+        String token = request.getToken();
+        Optional<RefreshToken> byToken = tokenRepository.findByToken(request.getToken());
+        if(byToken.isPresent()){
+            tokenRepository.deleteByToken(byToken);
+        }
+    }
 }
