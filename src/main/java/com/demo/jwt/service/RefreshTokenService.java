@@ -44,10 +44,9 @@ public class RefreshTokenService {
     }
 
     public void logout(RefreshTokenRequest request) {
-        String token = request.getToken();
         Optional<RefreshToken> byToken = tokenRepository.findByToken(request.getToken());
         if(byToken.isPresent()){
-            tokenRepository.deleteByToken(byToken);
+            tokenRepository.deleteById(byToken.get().getId());
         }
     }
 }
